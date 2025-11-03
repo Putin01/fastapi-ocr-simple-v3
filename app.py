@@ -1,28 +1,49 @@
-ï»¿from fastapi import FastAPI
-import os
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
-app = FastAPI(title="OCR API Simple", version="3.1.0")
+app = FastAPI(title="OCR API", version="1.0")
 
+# CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Root endpoint
 @app.get("/")
-def root():
-    return {
-        "message": "ðŸš€ OCR API Version 3 - DEPLOY THÃ€NH CÃ”NG!", 
-        "status": "success",
-        "version": "3.1.0"
-    }
+async def root():
+    return {"message": "OCR API - Deploy thành công!", "status": "working"}
 
 @app.get("/health")
-def health():
-    return {"status": "healthy", "version": "3.1.0"}
+async def health():
+    return {"status": "healthy", "version": "1.0.0"}
 
-@app.get("/tinh-nang")
-def features():
+@app.get("/test")
+async def test():
+    return {"test": "success", "api": "working"}
+
+# OCR Endpoints
+@app.get("/api/ocr-info")
+async def ocr_info():
     return {
-        "features": ["ocr", "ai", "simple-api"], 
-        "version": "3.1.0"
+        "name": "OCR API", 
+        "version": "1.0",
+        "endpoints": ["/api/ocr", "/api/extract-text"]
     }
 
-# Important for Vercel
+@app.post("/api/extract-text")
+async def extract_text_simple():
+    return {
+        "success": True, 
+        "text": "Ðây là van b?n m?u t? OCR",
+        "message": "OCR endpoint dã s?n sàng!"
+    }
+
+# Handler cho Vercel
+import os
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=int(os.environ.get("PORT", 8000)))
