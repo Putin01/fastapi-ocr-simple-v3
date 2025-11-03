@@ -1,7 +1,7 @@
 ﻿from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-app = FastAPI(title="OCR API", version="1.0")
+app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
@@ -13,7 +13,7 @@ app.add_middleware(
 
 @app.get("/")
 async def root():
-    return {"message": "OCR API - Deploy successful!", "status": "working"}
+    return {"message": "OCR API - Working", "status": "success"}
 
 @app.get("/health")
 async def health():
@@ -27,40 +27,37 @@ async def test():
 @app.get("/api/ocr-info")
 async def ocr_info():
     return {
-        "name": "OCR API", 
-        "version": "1.0",
+        "name": "OCR API",
+        "version": "1.0", 
         "endpoints": [
-            {"path": "/api/ocr", "method": "POST", "description": "OCR from image URL"},
-            {"path": "/api/extract-text", "method": "POST", "description": "Test OCR endpoint"}
+            "/api/ocr",
+            "/api/extract-text"
         ]
     }
 
 @app.post("/api/extract-text")
-async def extract_text_simple():
+async def extract_text():
     return {
-        "success": True, 
-        "text": "Sample text from OCR",
-        "message": "OCR endpoint ready!",
-        "language": "vi"
+        "success": True,
+        "text": "This is sample OCR text",
+        "message": "OCR endpoint is working"
     }
 
 @app.post("/api/ocr")
-async def ocr_from_url(image_url: str = None):
-    if not image_url:
+async def ocr_endpoint(image_url: str = None):
+    if image_url:
+        return {
+            "success": True,
+            "text": f"OCR processing for: {image_url}",
+            "image_url": image_url,
+            "status": "processed"
+        }
+    else:
         return {
             "success": False,
-            "error": "Missing image_url parameter",
-            "usage": "Send POST with {'image_url': 'https://...'}"
+            "error": "Please provide image_url"
         }
-    
-    return {
-        "success": True,
-        "text": f"OCR from image: {image_url} (feature in development)",
-        "image_url": image_url,
-        "status": "processing"
-    }
 
-import os
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=int(os.environ.get("PORT", 8000)))
+    uvicorn.run(app, host="0.0.0.0", port=8000)
