@@ -1,6 +1,10 @@
 ﻿from fastapi import FastAPI
+from pydantic import BaseModel
 
 app = FastAPI()
+
+class OCRRequest(BaseModel):
+    image_url: str
 
 @app.get("/")
 def root():
@@ -30,9 +34,10 @@ def extract_text():
     }
 
 @app.post("/api/ocr")
-def ocr_endpoint():
+def ocr_endpoint(request: OCRRequest):
     return {
-        "success": True, 
-        "text": "OCR processing completed",
-        "status": "success"
+        "success": True,
+        "text": f"OCR processing for {request.image_url}",
+        "status": "success",
+        "image_url": request.image_url
     }
