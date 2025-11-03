@@ -3,7 +3,6 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="OCR API", version="1.0")
 
-# CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -12,10 +11,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Root endpoints
 @app.get("/")
 async def root():
-    return {"message": "OCR API - Deploy thanh cong!", "status": "working"}
+    return {"message": "OCR API - Deploy successful!", "status": "working"}
 
 @app.get("/health")
 async def health():
@@ -32,7 +30,7 @@ async def ocr_info():
         "name": "OCR API", 
         "version": "1.0",
         "endpoints": [
-            {"path": "/api/ocr", "method": "POST", "description": "OCR tu URL anh"},
+            {"path": "/api/ocr", "method": "POST", "description": "OCR from image URL"},
             {"path": "/api/extract-text", "method": "POST", "description": "Test OCR endpoint"}
         ]
     }
@@ -41,8 +39,8 @@ async def ocr_info():
 async def extract_text_simple():
     return {
         "success": True, 
-        "text": "Day la van ban mau tu OCR",
-        "message": "OCR endpoint da san sang!",
+        "text": "Sample text from OCR",
+        "message": "OCR endpoint ready!",
         "language": "vi"
     }
 
@@ -51,18 +49,17 @@ async def ocr_from_url(image_url: str = None):
     if not image_url:
         return {
             "success": False,
-            "error": "Thieu image_url parameter",
-            "usage": "Gui POST voi {'image_url': 'https://...'}"
+            "error": "Missing image_url parameter",
+            "usage": "Send POST with {'image_url': 'https://...'}"
         }
     
     return {
         "success": True,
-        "text": f"OCR tu anh: {image_url} (chuc nang dang phat trien)",
+        "text": f"OCR from image: {image_url} (feature in development)",
         "image_url": image_url,
         "status": "processing"
     }
 
-# Handler cho Vercel
 import os
 if __name__ == "__main__":
     import uvicorn
