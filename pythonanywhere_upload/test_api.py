@@ -1,10 +1,9 @@
 ﻿import requests
 
-def test_vercel_api():
-    # Thay thế bằng domain thực tế của bạn
-    base_url = "https://fastapi-ocr-simple-v3.vercel.app"
+def test_api():
+    base_url = "https://fastapi-ocr-simple-v3.up.railway.app"
     
-    print(f"🧪 Testing Vercel API: {base_url}")
+    print("🧪 Testing Smart OCR API...")
     
     try:
         # Test root endpoint
@@ -17,12 +16,10 @@ def test_vercel_api():
         print(f"✅ Health endpoint: {response.status_code}")
         print(f"   Response: {response.json()}")
         
-        print("🎉 Vercel API is working perfectly!")
-        return True
+        print("🎉 API is working perfectly!")
         
     except Exception as e:
         print(f"❌ API test failed: {e}")
-        return False
 
 if __name__ == "__main__":
-    test_vercel_api()
+    test_api()
