@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+ï»¿from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="OCR API", version="1.0")
@@ -15,7 +15,7 @@ app.add_middleware(
 # Root endpoints
 @app.get("/")
 async def root():
-    return {"message": "OCR API - Deploy thành công!", "status": "working"}
+    return {"message": "OCR API - Deploy thanh cong!", "status": "working"}
 
 @app.get("/health")
 async def health():
@@ -32,7 +32,7 @@ async def ocr_info():
         "name": "OCR API", 
         "version": "1.0",
         "endpoints": [
-            {"path": "/api/ocr", "method": "POST", "description": "OCR t? URL ?nh"},
+            {"path": "/api/ocr", "method": "POST", "description": "OCR tu URL anh"},
             {"path": "/api/extract-text", "method": "POST", "description": "Test OCR endpoint"}
         ]
     }
@@ -41,8 +41,8 @@ async def ocr_info():
 async def extract_text_simple():
     return {
         "success": True, 
-        "text": "Ðây là van b?n m?u t? OCR",
-        "message": "OCR endpoint dã s?n sàng!",
+        "text": "Day la van ban mau tu OCR",
+        "message": "OCR endpoint da san sang!",
         "language": "vi"
     }
 
@@ -51,13 +51,13 @@ async def ocr_from_url(image_url: str = None):
     if not image_url:
         return {
             "success": False,
-            "error": "Thi?u image_url parameter",
-            "usage": "G?i POST v?i {'image_url': 'https://...'}"
+            "error": "Thieu image_url parameter",
+            "usage": "Gui POST voi {'image_url': 'https://...'}"
         }
     
     return {
         "success": True,
-        "text": f"OCR t? ?nh: {image_url} (ch?c nang dang phát tri?n)",
+        "text": f"OCR tu anh: {image_url} (chuc nang dang phat trien)",
         "image_url": image_url,
         "status": "processing"
     }
