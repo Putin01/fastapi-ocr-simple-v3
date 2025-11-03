@@ -1,10 +1,11 @@
 ﻿from fastapi import FastAPI
+import os
 
 app = FastAPI()
 
 @app.get("/")
-def root():
-    return {"message": "OCR API - Fixed deployment", "status": "working"}
+def read_root():
+    return {"message": "OCR API - Fixed", "status": "working"}
 
 @app.get("/health")
 def health():
@@ -14,32 +15,14 @@ def health():
 def test():
     return {"test": "success", "api": "working"}
 
-# OCR ENDPOINTS
 @app.get("/api/ocr-info")
 def ocr_info():
-    return {
-        "name": "OCR API",
-        "version": "1.0",
-        "endpoints": ["/api/ocr", "/api/extract-text"]
-    }
+    return {"name": "OCR API", "endpoints": ["/api/ocr"]}
 
 @app.post("/api/extract-text")
 def extract_text():
-    return {
-        "success": True,
-        "text": "Sample OCR text",
-        "message": "OCR is working"
-    }
+    return {"text": "Sample OCR text", "success": True}
 
 @app.post("/api/ocr")
 def ocr_endpoint(image_url: str = None):
-    if image_url:
-        return {
-            "success": True,
-            "text": f"OCR from: {image_url}",
-            "status": "success"
-        }
-    return {
-        "success": False,
-        "error": "Need image_url"
-    }
+    return {"text": f"OCR from {image_url}", "success": True}
