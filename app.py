@@ -12,7 +12,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Root endpoint
+# Root endpoints
 @app.get("/")
 async def root():
     return {"message": "OCR API - Deploy thành công!", "status": "working"}
@@ -25,13 +25,16 @@ async def health():
 async def test():
     return {"test": "success", "api": "working"}
 
-# OCR Endpoints
+# ========== OCR ENDPOINTS ==========
 @app.get("/api/ocr-info")
 async def ocr_info():
     return {
         "name": "OCR API", 
         "version": "1.0",
-        "endpoints": ["/api/ocr", "/api/extract-text"]
+        "endpoints": [
+            {"path": "/api/ocr", "method": "POST", "description": "OCR t? URL ?nh"},
+            {"path": "/api/extract-text", "method": "POST", "description": "Test OCR endpoint"}
+        ]
     }
 
 @app.post("/api/extract-text")
@@ -39,7 +42,24 @@ async def extract_text_simple():
     return {
         "success": True, 
         "text": "Ðây là van b?n m?u t? OCR",
-        "message": "OCR endpoint dã s?n sàng!"
+        "message": "OCR endpoint dã s?n sàng!",
+        "language": "vi"
+    }
+
+@app.post("/api/ocr")
+async def ocr_from_url(image_url: str = None):
+    if not image_url:
+        return {
+            "success": False,
+            "error": "Thi?u image_url parameter",
+            "usage": "G?i POST v?i {'image_url': 'https://...'}"
+        }
+    
+    return {
+        "success": True,
+        "text": f"OCR t? ?nh: {image_url} (ch?c nang dang phát tri?n)",
+        "image_url": image_url,
+        "status": "processing"
     }
 
 # Handler cho Vercel
